@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: install webserver on ubuntu(apache2)
+    apt:
+      name: "{{webubuntupack}}"
+      state: present
+    when: ansible_os_family =="Debian"
+  - name: start webserver on ubuntu(apache2)
+    service:
+      name: "{{webubuntupack}}"
+      state: started
+    when: ansible_os_family =="Debian"
+
+
+  - name: install webserver on Redhat ( httpd )
+    yum:
+      name: "{{webredpack}}" 
+      state: present
+    when: ansible_os_family =="RedHat"
+  - name: start webserver on Redhat
+    service:
+      name: "{{webredpack}}"
+      state: started
+    when: ansible_os_family =="RedHat"
+
+  - name: remove softwares on ubuntu(git)
+    apt:
+      name: "{{softwares}}"
+      state: absent
+    when: ansible_os_family =="Debian"

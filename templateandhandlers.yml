@@ -1,0 +1,27 @@
+---
+- hosts: webservers
+  become: yes
+  tasks:
+  - include_tasks: myfile.yml
+  - name: install webserver on redhat 
+    yum:
+      name: httpd
+      state: present
+    notify: restartttpd
+    
+  - name: copy file(index.html) into all nodes
+    template:
+      src: myindex.j2
+      dest: /var/www/html/index.html
+    notify: restartttpd
+
+ 
+  handlers:
+  - name: restartttpd
+    service:
+      name: httpd
+      state: restarted 
+
+
+
+      
